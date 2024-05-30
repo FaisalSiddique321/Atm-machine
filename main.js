@@ -1,0 +1,65 @@
+#! /usr/bin/env node
+import inquirer from "inquirer";
+// printing a wellcome message 
+console.log("\n\twellcome to \'faisalsiddique\' - atm machine\n");
+let myBalance = 10000;
+const pinCode = 1234;
+let pinEntered = await inquirer.prompt({
+    name: "pin",
+    message: "Enter Pin Code",
+    type: "number",
+});
+if (pinEntered.pin === pinCode) {
+    console.log("Correct Pin Code!!");
+    let atmOption = await inquirer.prompt({
+        name: "option",
+        message: "Select an option please: ",
+        type: "list",
+        choices: ["Balance Check", "Withdraw"],
+    });
+    if (atmOption.option === "Balance Check") {
+        console.log(myBalance);
+    }
+    else {
+        let atmMethods = await inquirer.prompt({
+            name: "method",
+            message: "Select an method of withdrawal",
+            type: "list",
+            choices: ["Cash Withdraw", "Fast Cash"]
+        });
+        if (atmMethods.method === "Cash Withdraw") {
+            let cashAmount = await inquirer.prompt({
+                name: "withdrawal",
+                message: "Enter amount you want to withdraw",
+                type: "number",
+            });
+            if (myBalance >= cashAmount.withdrawal) {
+                myBalance -= cashAmount.withdrawal;
+                console.log(`Your remaining balace is: ${myBalance}`);
+            }
+            else {
+                console.log("Sorry!!! Insufficient Balance.");
+            }
+        }
+        ;
+        if (atmMethods.method === "Fast Cash") {
+            let fastAmount = await inquirer.prompt({
+                name: "fastCash",
+                message: "Please select price you want to withdraw",
+                type: "list",
+                choices: ["500", "1000", "2000", "5000", "15000"]
+            });
+            if (myBalance >= fastAmount.fastCash) {
+                myBalance -= fastAmount.fastCash;
+                console.log(`Your remaining balance is: ${myBalance}`);
+            }
+            else {
+                console.log("Sorry! Insufficient Balance.");
+            }
+        }
+    }
+}
+else {
+    console.log("Incorrect Pin Code!!!");
+}
+;
